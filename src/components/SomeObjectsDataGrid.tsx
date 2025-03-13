@@ -16,7 +16,6 @@ const SomeObjectsDataGrid = () => {
     const [rowCount, setRowCount] = useState<number>(0);
     const [filters, setFilters] = useState({ number: "", code: "", value: "" });
     const [resetButtonClick, setResetButtonClick] = useState(false);
-    const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
     const fetchSomeObjects = async () => {
         setLoading(true);
@@ -43,7 +42,7 @@ const SomeObjectsDataGrid = () => {
 
     useEffect(() => {
         fetchSomeObjects();
-    }, [paginationModel, resetButtonClick, hasActiveFilters]);
+    }, [paginationModel, resetButtonClick, sortModel]);
 
     const columns: GridColDef[] = [
         { field: "number", headerName: "Number" },
@@ -51,16 +50,9 @@ const SomeObjectsDataGrid = () => {
         { field: "value", headerName: "Value" }
     ];
 
-    const applyFilters = () => {
-        if (filters.number || filters.code || filters.value) {
-            setHasActiveFilters(hasActiveFilters ? false : true);
-        }
-    };
-
     const resetFilters = () => {
         if (filters.number || filters.code || filters.value) {
             setResetButtonClick(resetButtonClick ? false : true);
-            setHasActiveFilters(false);
         }
 
         setFilters({ number: "", code: "", value: "" });
@@ -90,7 +82,7 @@ const SomeObjectsDataGrid = () => {
                     value={filters.value}
                     onChange={(e) => setFilters({ ...filters, value: e.target.value })}
                 />
-                <Button variant="contained" onClick={applyFilters}>Apply</Button>
+                <Button variant="contained" onClick={fetchSomeObjects}>Apply</Button>
                 <Button variant="contained" onClick={resetFilters}>Reset</Button>
             </Box>
             <div style={{ height: 400, width: "100%" }}>
